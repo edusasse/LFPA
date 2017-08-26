@@ -1,0 +1,169 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+Package = com.LFPA.Interpretador
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = Stream
+Parser = LL
+#RegularDefinitions
+MAIUSC		: [A-Z]
+minusc		: [a-z]
+digito		: [0-9]
+digitoSemZero	: [1-9]
+inteiro		: 0|({digitoSemZero}({digito}?{digito}?{digito}?{digito}?))
+
+origem		: aie|ali|se|ce|ee
+var		: VAF|VAFA|VAFB|UFPC|CHGB|UFP|CFP
+acao_melhoria	: ADD|CHGA|DEL
+
+texto		: \"[^\"]*\"
+prog_nome	: (programa|prog)[\s\t\n\t\r]+({MAIUSC}|{minusc}|{inteiro}|"_")+
+proj_nome	: (projeto|proj)[\s\t\n\t\r]+({MAIUSC}|{minusc}|{inteiro}|"_")+
+
+comunicacao_de_dados 		: :(comunicacao_de_dados|1)
+processamento_distribuido 		: :(processamento_distribuido|2)
+performance 			: :(performance|3)
+configuracao_altamente_utilizada	: :(configuracao_altamente_utilizada|4)
+taxa_de_transacoes 		: :(taxa_de_transacoes|5)
+entrada_de_dados_on_line 		: :(entrada_de_dados_on_line|6)
+eficiencia_do_usuario_final 	: :(eficiencia_do_usuario_final|7)
+atualizacao_on_line 		: :(atualizacao_on_line|8)
+complexidade_de_processamento 	: :(complexidade_de_processamento|9)
+reutilizacao			: :(reutilizacao|10)
+facilidade_de_instalacao 		: :(facilidade_de_instalacao|11)
+facilidade_de_operacao		: :(facilidade_de_operacao|12)
+multiplas_localidades 		: :(multiplas_localidades|13)
+facilidade_de_mudancas 		: :(facilidade_de_mudancas|14)
+
+estende 	: estende
+melhoria : melhoria
+desenvol : desenvolvimento
+#Tokens
+origem				: {origem}
+acao_melhoria			: {acao_melhoria}
+variavel				: {var}
+
+comunicacao_de_dados 		: {comunicacao_de_dados}
+processamento_distribuido 		: {processamento_distribuido}	
+performance 			: {performance}	
+configuracao_altamente_utilizada	: {configuracao_altamente_utilizada}
+taxa_de_transacoes 		: {taxa_de_transacoes}
+entrada_de_dados_on_line 		: {entrada_de_dados_on_line}	
+eficiencia_do_usuario_final 	: {eficiencia_do_usuario_final}	
+atualizacao_on_line 		: {atualizacao_on_line}
+complexidade_de_processamento 	: {complexidade_de_processamento}	
+reutilizacao			: {reutilizacao}	
+facilidade_de_instalacao 		: {facilidade_de_instalacao}	
+facilidade_de_operacao		: {facilidade_de_operacao}
+multiplas_localidades 		: {multiplas_localidades}
+facilidade_de_mudancas		: {facilidade_de_mudancas}
+
+estende 				: {estende}
+melhoria				: {melhoria}
+desenvol 			: {desenvol}
+
+proj_nome			: {proj_nome}
+prog_nome			: {prog_nome}
+
+texto				: {texto}
+
+int				: {inteiro}
+
+multiplicador 			: "*"
+doisPontos 			: ":"
+pontoVirgula 			: ";"
+virgula 				: ","
+abreParenteses 			: "("
+fechaParenteses 			: ")"
+abreChaves 			: "{"
+fechaChaves 			: "}"
+
+:!"\\"[^\n]*
+:![\s\t\n\t\r]*
+#NonTerminals
+<projeto>
+<tipo>
+<programa>
+<estende>
+<programaAux>
+<inicio>
+<fpas>
+<acaoDeMelhoria>
+<texto>
+<inicio_aux>
+<acaoChaves>
+<acaoChaves_aux>
+<acao> 
+<auxAcao>
+<multiplicador>
+<nivComplex>
+<niveis>
+<variaveis>
+<varAux>	
+#Grammar
+// 1 - nome do projeto | 99 - Final do Projeto
+<projeto>	::= proj_nome #1 <tipo> abreChaves <programaAux> fechaChaves #99;
+
+// 2 - Projeto de Melhoria | 3 - Projeto Desenvolvimento
+<tipo>		::= melhoria #2 | desenvol #3;
+// 98 - Final do Programa
+<programaAux> 	::= î #98 | <programa> | <variaveis>;
+
+// 4 - Guarda o nome do programa - cuidar para que o programa ja nao tenha sido declarado
+<programa>    	::= prog_nome #4 <estende> abreChaves <inicio> fechaChaves <programaAux>;
+
+// 5 - diz que esta extendendo | 6 - nome
+<estende>	::= estende #5 prog_nome #6 | î;
+
+// 7 - Flag esta declarando FPA | 8 - Flag esta declarando niveis de complexidade
+<inicio>   	::= #7 <fpas> | #8 <nivComplex> ;
+
+// 10 - Guarda a Origem 
+<fpas>     	::= <acaoDeMelhoria> origem #10 <inicio_aux> <inicio> | î;
+
+// 9 - Verificar se esta num projeto de melhoria
+<acaoDeMelhoria>::= acao_melhoria #9 | î;
+
+// 11 - flag para dizer que esta num grupo
+<inicio_aux>  	::= #11 <acaoChaves> | <acao>;
+
+// 18 - Fecha o grupo aberto na acao 11
+<acaoChaves>  	::= abreChaves <acao> <acaoChaves_aux> fechaChaves #18;
+<acaoChaves_aux>::= <acao> <acaoChaves_aux> | î;
+
+// 13 - Pega o numero passado
+<acao>       	::= <texto> int #13 <auxAcao> <multiplicador> pontoVirgula;
+
+// 12 - Texto de observacao
+<texto>	       	::= î | texto #12;
+
+// 14 - Pega o segundo valor passado | 15 - Considera valor padrao '1'
+<auxAcao>    	::= virgula int #14 | î #15 ;
+
+// 16 - para saber que e multiplicador | 17 - Valor a multiplicar
+<multiplicador>	::= î #23 | multiplicador #16 int #17;
+
+// 19 - Guarda o nivel de complexidade | 20 - guarda o inteiro do nivel
+<nivComplex>	::= <niveis> #19 int #20 pontoVirgula <inicio>;
+<niveis>	::= 	processamento_distribuido 
+			| comunicacao_de_dados 
+			| performance 
+			| configuracao_altamente_utilizada 
+			| taxa_de_transacoes
+			| entrada_de_dados_on_line 
+			| eficiencia_do_usuario_final
+			| atualizacao_on_line 
+			| complexidade_de_processamento
+                           | reutilizacao 
+			| facilidade_de_instalacao 
+			| facilidade_de_operacao
+			| multiplas_localidades 
+			| facilidade_de_mudancas;
+
+// 21 - 
+<variaveis>	::= variavel #21 int #22 pontoVirgula <programaAux>;
