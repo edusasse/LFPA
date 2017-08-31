@@ -1,51 +1,75 @@
-# VisualSQL
+# LFPA
 
-Is a visual tool that allows you to use relational algebra operators to interact with a real database. Built in support for MySQL.
-
-Wiki: [Relational Algebra(Wiki)](https://en.wikipedia.org/wiki/Relational_algebra)
+LFPA is a language that helps to describe the FPA count. The language is based on words from Portuguese.
 
 ## Getting Started
 
-After building the application VisualSQL can be started from the bat file VisualSQL.bat.
+A simple editor:
 
-* First step is to create a connection.
+![LFPA Editor](img/editor.png)
 
-![Configure Connection](img/connection-config.png)
+A simple example:
 
-After crating the connection you will have to select it for it to be considered active.
+```
+projeto Exemplo01 desenvolvimento {
+	prog seguranca {
+		aie "Chave Criptografica" 7,3;
+		:2 3;
+		:reutilizacao 5;
+	}
+	prog exe01 estende prog seguranca {
+		:1 5;
+		:3 1;
+		:4 1;
+		:5 4;
+		:6 1;
+		:7 4;
+		:8 1;
+		:9 1;
+		:11 1;
+		:12 1;
+		:13 4;
+		:14 1;
 
-* Now lets create a diagram by the selecting  operators and tables from the left panels. The generated SQL and the values are presented right below.
+	ali {
+		"Diagnosticos" 1,18;
+		"Leitos" 1,5;
+		"Remedios" 3,23;
+	}
+	aie {
+		"Médicos  " 1,31;
+		"Pacientes" 1,16;
+	}
+	ee {
+		"Incluir Diagnósticos" 1,18;
+		"Incluir Leitos" 1,5;
+		"Incluir Remédios" 3,23;
+		"Excluir Diagnósticos" 1,18;
+		"Excluir Leitos" 1,5;
+		"Excluir Remédios" 3,23;
+		"Alterar Diagnósticos" 1,18;
+		"Alterar Leitos" 1,5;
+		"Alterar Remédios" 3,23;
+	}
+	se {
+		"Histórico do Paciente" 4,10;
+		"Ocupação de Leitos" 2,5;
+	}
+	ce {
+		"Disponibilidade de Remédios" 3,1;
+		"Disponibilidade de Leitos" 3,1;
+		"Horário de Trabalho dos Médicos" 3,1;
+	}
 
-![Diagram](img/diagram.png)
+ }
+}
+```
 
-A table with the result is also displayed.
+* Performing the calculation:
 
-![Diagram - table](img/table.png)
-
-### Prerequisites
-
-The tool was developed as an Applet using Java 6.
+![LFPA Editor](img/calculo.png)
 
 We have a simple stack:
-* Java 6
-* Applet
-* MySQL (embedded driver)
-* JDOM
+* Java
+* GALS
 * Maven
-
-### Installing
-
-To build and generate the distribution Jar-file:
-```
-mvn package
-```
-
-## Running the tests
-
-```
-mvn test
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

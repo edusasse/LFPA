@@ -58,7 +58,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>com.edusasse.lfpa.gui.lfpaApp</mainClass>
+							<mainClass>com.edusasse.lfpa.gui.TelaGUI</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
