@@ -1,6 +1,6 @@
 # LFPA
 
-LFPA is a language that helps to describe the FPA count. The language is based on words from Portuguese.
+LFPA is a language that helps to describe the FPA count. The language for words reserved for the language is Portuguese.
 
 ## Getting Started
 
@@ -69,7 +69,7 @@ projeto Exemplo01 desenvolvimento {
 
 ![LFPA Editor](img/calculo.png)
 
-We have a simple stack:
+## We have a simple stack:
 * Java
 * GALS
 * Maven
